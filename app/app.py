@@ -1,6 +1,5 @@
 from flask import Flask
-import pyaudio
-import wave
+import speech_recognition as sr
 # create_app wraps the other functions to set up the project
 
 def create_app(config=None, testing=False, cli=True):
@@ -9,44 +8,23 @@ def create_app(config=None, testing=False, cli=True):
     """
     app = Flask(__name__, static_folder=None)
 
-    @app.route("/")
+    @app.route("/record")
     def hello():
-        return "Hello World!"
+        # get audio from the microphone
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            print("Speak:")
+            audio = r.listen(source)
 
-    CHUNK = 1024
-    FORMAT = pyaudio.paInt16
-    CHANNELS = 2
-    RATE = 44100
-    RECORD_SECONDS = 5
-    WAVE_OUTPUT_FILENAME = "output.wav"
-
-    p = pyaudio.PyAudio()
-
-    stream = p.open(format=FORMAT,
-                    channels=CHANNELS,
-                    rate=RATE,
-                    input=True,
-                    frames_per_buffer=CHUNK)
-
-    print("* recording")
-
-    frames = []
-
-    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-        data = stream.read(CHUNK)
-        frames.append(data)
-
-    print("* done recording")
-
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
-
-    wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
-    wf.setnchannels(CHANNELS)
-    wf.setsampwidth(p.get_sample_size(FORMAT))
-    wf.setframerate(RATE)
-    wf.writeframes(b''.join(frames))
-    wf.close()
+        try:
+            print("You said " + r.recognize_google(audio))
+            # TODO: add producer {'content': msg}  to kafka topic same as ingest-twitter
+        except sr.UnknownValueError:
+            print("Could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results; {0}".format(e))
+        
+        return "Done"
+    
 
     return app

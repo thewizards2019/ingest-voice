@@ -8,7 +8,7 @@ setuptools.setup(
     zip_safe=False,
     install_requires=[
         'Flask',
-        'pyaudio'
+        'SpeechRecognition'
     ],
     extras_require={
         'dev': [
