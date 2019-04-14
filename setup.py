@@ -9,6 +9,7 @@ setuptools.setup(
     install_requires=[
         'Flask',
         'SpeechRecognition'
+        'confluent_kafka',
     ],
     extras_require={
         'dev': [
