@@ -1,9 +1,12 @@
 from flask import Flask
 import speech_recognition as sr
 from confluent_kafka import Producer
-import json, uuid
+import json
+import uuid
 
 # create_app wraps the other functions to set up the project
+
+
 def create_app(config=None, testing=False, cli=True):
     """
     Application factory, used to create application
