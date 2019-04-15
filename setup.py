@@ -10,6 +10,7 @@ setuptools.setup(
         'Flask',
         'SpeechRecognition',
         'confluent_kafka',
+        'PyAudio'
     ],
     extras_require={
         'dev': [
