@@ -8,7 +8,7 @@ setuptools.setup(
     zip_safe=False,
     install_requires=[
         'Flask',
-        'SpeechRecognition'
+        'SpeechRecognition',
         'confluent_kafka',
     ],
     extras_require={
